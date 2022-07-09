@@ -1,0 +1,17 @@
+{
+    "name": "hexlet/code",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Культяпов Константин",
+            "email": "pozys@mail.ru"
+        }
+    ],
+    "description": "generate diff",
+    "bin": [
+        "bin/gendiff"
+    ],
+    "require": {
+        "docopt/docopt": "^1.0"
+    }
+}
