@@ -10,21 +10,9 @@ if (file_exists($autoloadPath1)) {
     require_once $autoloadPath2;
 }
 
-$doc = <<<DOC
-Generate diff
+use function Php\Project\Lvl2\Differ\genDiff;
+use function Php\Project\Lvl2\Helpdoc\getHelpText;
 
-Usage:
-  gendiff (-h|--help)
-  gendiff (-v|--version)
-  gendiff [--format <fmt>] <firstFile> <secondFile>
+$args = Docopt::handle(getHelpText());
 
-Options:
-  -h --help                     Show this screen
-  -v --version                  Show version
-  --format <fmt>                Report format [default: stylish]
-
-DOC;
-
-$args = Docopt::handle($doc);
-
-print_r($args);
+echo(genDiff($args['<firstFile>'], $args['<secondFile>']) . "\n");

@@ -7,10 +7,16 @@
             "email": "pozys@mail.ru"
         }
     ],
-    "description": "generate diff",
+    "description": "generate difference between two files",
     "bin": [
         "bin/gendiff"
     ],
+    "autoload": {
+        "files": [
+            "src/Helpdoc.php",
+            "src/Differ.php"
+        ]
+    },
     "require": {
         "docopt/docopt": "^1.0"
     }
