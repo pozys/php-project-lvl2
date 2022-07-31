@@ -15,4 +15,4 @@ use function Php\Project\Lvl2\Helpdoc\getHelpText;
 
 $args = Docopt::handle(getHelpText());
 
-echo(genDiff($args['<firstFile>'], $args['<secondFile>']) . "\n");
+print_r(genDiff($args['<firstFile>'], $args['<secondFile>']) . "\n");

@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/pozys/php-project-lvl2'
+composer exec --verbose phpcs -- --standard=PSR12 src bin tests
+make: Leaving directory '/home/pozys/php-project-lvl2'
+ 

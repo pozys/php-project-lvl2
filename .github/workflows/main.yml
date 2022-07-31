@@ -1,0 +1,13 @@
+name: main-workflow
+
+on: push
+jobs:
+  checkout-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout
+      - name: run lint
+        run: make lint
+      - name: run tests
+        run: make tests

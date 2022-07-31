@@ -1,11 +1,10 @@
 <?php
 
-
 namespace Php\Project\Lvl2\Helpdoc;
 
 function getHelpText(): string
 {
-    return <<<DOC
+    $help = <<<DOC
 Generate diff
 
 Usage:
@@ -19,5 +18,6 @@ Options:
   --format <fmt>                Report format [default: stylish]
 
 DOC;
-}
 
+    return $help;
+}
