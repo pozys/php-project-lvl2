@@ -3,3 +3,6 @@ lint:
 
 tests:
 	composer exec --verbose phpunit tests
+
+install:
+	composer install
