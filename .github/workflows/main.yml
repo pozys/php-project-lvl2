@@ -20,4 +20,4 @@ jobs:
       - name: Run tests
         run: make tests
       - name: Send The Report to Code Climate
-        run: ./cc-test-reporter after-build
+        run: ./cc-test-reporter after-build -t clover
