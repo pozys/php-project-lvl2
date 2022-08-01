@@ -3,11 +3,11 @@ name: main-workflow
 on: push
 jobs:
   checkout-app:
+    env:
+      CC_TEST_REPORTER_ID: ${{ secrets.TEST_REPORTER_ID }}
     runs-on: ubuntu-latest
 
-    steps:
-      - env:
-          CC_TEST_REPORTER_ID: ${{ secrets.TEST_REPORTER_ID }}
+    steps:      
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: make install
