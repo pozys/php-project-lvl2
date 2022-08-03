@@ -11,4 +11,4 @@ install:
 	composer install
 
 install-xdebug:
-	pecl install xdebug
+	sudo apt-get install php-xdebug
