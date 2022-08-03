@@ -1,6 +1,5 @@
 /vendor/
 .vscode
-phpunit.xml
 .phpunit.result.cache
 logs
 build
