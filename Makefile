@@ -9,3 +9,6 @@ test-coverage:
 
 install:
 	composer install
+
+install_xdebug:
+	pecl install xdebug
