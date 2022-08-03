@@ -18,11 +18,6 @@ jobs:
       - name: Run lint
         run: make lint
 
-      - name: Setup Code Climate test-reporter
-        run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-      - run: chmod +x ./cc-test-reporter
-      - run: ./cc-test-reporter before-build
-
       - name: Run tests
         uses: paambaati/codeclimate-action@v3.0.0
         env:
