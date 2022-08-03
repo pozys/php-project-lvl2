@@ -3,23 +3,29 @@ name: main-workflow
 on: push
 jobs:
   checkout-app:
-    env:
-      CC_TEST_REPORTER_ID: ${{ secrets.TEST_REPORTER_ID }}
     runs-on: ubuntu-latest
 
     steps:      
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: make install
-      - name: install Xdebug
-        run: make install-xdebug 
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
       - name: Run lint
         run: make lint
+
       - name: Setup Code Climate test-reporter
         run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       - run: chmod +x ./cc-test-reporter
       - run: ./cc-test-reporter before-build
+
       - name: Run tests
-        run: make test-coverage
-      - name: Send The Report to Code Climate
-        run: ./cc-test-reporter after-build -t clover
+        uses: paambaati/codeclimate-action@v2.2.4
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.TEST_REPORTER_ID }}
+        with: 
+          coverageCommand: make test-coverage

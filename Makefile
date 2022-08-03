@@ -9,6 +9,3 @@ test-coverage:
 
 install:
 	composer install
-
-install-xdebug:
-	sudo apt-get install php-xdebug
