@@ -3,5 +3,5 @@
 .phpunit.result.cache
 logs
 build
-file1.*
-file2.*
+/file1.*
+/file2.*
