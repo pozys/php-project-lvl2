@@ -14,11 +14,13 @@
     "autoload": {
         "files": [
             "src/Helpdoc.php",
-            "src/Differ.php"
+            "src/Differ.php",
+            "src/Parsers.php"
         ]
     },
     "require": {
-        "docopt/docopt": "^1.0"
+        "docopt/docopt": "^1.0",
+        "symfony/yaml": "^5.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",

@@ -4,6 +4,8 @@ namespace Php\Project\Lvl2\Differ;
 
 use Exception;
 
+use function Php\Project\Lvl2\Parser\getParsedData;
+
 const ADDED_MARK = 'added';
 const DELETED_MARK = 'deleted';
 const UNCHANGED_MARK = 'unchanged';
@@ -11,12 +13,12 @@ const UPDATED_MARK = 'updated';
 
 function genDiff(string $pathToFile1, string $pathToFile2): string
 {
-    if (!(file_exists($pathToFile1) && file_exists($pathToFile2))) {
-        return 'Один или несколько файлов не найдены.';
-    }
+    $data1 = getParsedData($pathToFile1);
+    $data2 = getParsedData($pathToFile2);
 
-    $data1 = json_decode(file_get_contents($pathToFile1), true);
-    $data2 = json_decode(file_get_contents($pathToFile2), true);
+    if (is_null($data1) || is_null($data2)) {
+        return 'Произошла ошибка при обработке файлов';
+    }
 
     $deleted = getDeleted($data1, $data2);
     $added = getAdded($data1, $data2);
