@@ -15,7 +15,9 @@
         "files": [
             "src/Helpdoc.php",
             "src/Differ.php",
-            "src/Parsers.php"
+            "src/Parsers.php",
+            "src/Formatter.php",
+            "src/Comparator.php"
         ]
     },
     "require": {

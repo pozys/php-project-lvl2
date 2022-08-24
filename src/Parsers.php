@@ -4,7 +4,7 @@ namespace Php\Project\Lvl2\Parser;
 
 use Symfony\Component\Yaml\Yaml;
 
-function getParsedData(string $filePath): ?array
+function getParsedData(string $filePath): object
 {
     if (!file_exists($filePath)) {
         return null;
@@ -27,9 +27,9 @@ function getParser(string $extension): callable
 {
     return function ($data) use ($extension) {
         if (in_array($extension, ['yaml', 'yml'])) {
-            return Yaml::parse($data);
+            return Yaml::parse($data, Yaml::PARSE_OBJECT_FOR_MAP);
         } else {
-            return json_decode($data, true);
+            return json_decode($data);
         }
     };
 }
