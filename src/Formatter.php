@@ -17,7 +17,7 @@ function getStylished($value, int $depth = 0)
 {
     if (is_string($value)) {
         return $value;
-    } else if (is_array($value)) {
+    } elseif (is_array($value)) {
         return getFormattedArray($value, $depth);
     }
 
@@ -29,7 +29,7 @@ function getFormattedArray(array $values, int $depth): string
     $replacer = ' ';
     $result = array_map(fn (
         $description
-    ) => getFormattedRow($replacer,  $description, $depth + 1), $values);
+    ) => getFormattedRow($replacer, $description, $depth + 1), $values);
 
     $bracketIndent = str_repeat($replacer, $depth * 4);
     $result = ['{', ...$result, "{$bracketIndent}}"];
@@ -41,7 +41,7 @@ function getFormattedRow(string $replacer, $element, int $depth): string
 {
     if (isAdded($element)) {
         $mark = '+';
-    } else if (isDeleted($element)) {
+    } elseif (isDeleted($element)) {
         $mark = '-';
     } else {
         $mark = ' ';
