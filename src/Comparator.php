@@ -66,7 +66,11 @@ function getAdded(object $data1, object $data2): array
 
 function getCheckingValues(object $original, array $added, array $deleted): array
 {
-    return array_diff_key(get_object_vars($original), array_column($added, 'value', 'key'), array_column($deleted, 'value', 'key'));
+    return array_diff_key(
+        get_object_vars($original),
+        array_column($added, 'value', 'key'),
+        array_column($deleted, 'value', 'key')
+    );
 }
 
 function markAsAdded(string $key, $value): array
