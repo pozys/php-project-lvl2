@@ -13,5 +13,9 @@
 Сравнение файлов с вложенной структурой:
 [![asciicast](https://asciinema.org/a/nY18gdWznKXe1sbRhT0cFwcxN.svg)](https://asciinema.org/a/nY18gdWznKXe1sbRhT0cFwcxN)
 
-Сравнение файлов с вложенной структурой с указанием форматера:
-[![asciicast](https://asciinema.org/a/tY4Eh0IOOHL8QkcpNWBTvqudU.svg)](https://asciinema.org/a/tY4Eh0IOOHL8QkcpNWBTvqudU)
+Сравнение файлов с вложенной структурой с выбором формата вывода:
+- Stylish
+[![asciicast](https://asciinema.org/a/K2pzK4bnJiPgHiLRNBBGFiH5R.svg)](https://asciinema.org/a/K2pzK4bnJiPgHiLRNBBGFiH5R)
+
+- Plain
+[![asciicast](https://asciinema.org/a/l5GcdOigrMK9tpFiBikq8Jz5U.svg)](https://asciinema.org/a/l5GcdOigrMK9tpFiBikq8Jz5U)

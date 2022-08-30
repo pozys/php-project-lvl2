@@ -12,9 +12,7 @@ function getComparedData(object $data1, object $data2): array
 {
     $result = getDifferences($data1, $data2);
 
-    $result = getSortedData($result);
-
-    return $result;
+    return getSortedData($result);
 }
 
 function getDifferences(object $data1, object $data2): array
@@ -27,7 +25,7 @@ function getDifferences(object $data1, object $data2): array
     $compared = array_reduce(
         array_keys($checkingValues),
         function ($carry, $key) use ($data1, $data2) {
-            $carry = [...$carry, ...getCheckedData($data1, $data2, $key)];
+            $carry[] = getCheckedData($data1, $data2, $key);
 
             return $carry;
         },
@@ -75,32 +73,24 @@ function getCheckingValues(object $original, array $added, array $deleted): arra
 
 function markAsAdded(string $key, $value): array
 {
-    $value = markChildrenAsUnchanged($value);
-
     return getDescription($value, $key, ADDED_MARK);
 }
 
 function markAsDeleted(string $key, $value): array
 {
-    $value = markChildrenAsUnchanged($value);
-
     return getDescription($value, $key, DELETED_MARK);
+}
+
+function markAsUpdated(string $key, $oldValue, $newValue): array
+{
+    $value = [getDescription($oldValue, $key, DELETED_MARK), getDescription($newValue, $key, ADDED_MARK)];
+
+    return getDescription($value, $key, UPDATED_MARK);
 }
 
 function markAsUnchanged($value, string $key): array
 {
-    $value = markChildrenAsUnchanged($value);
-
     return getDescription($value, $key, UNCHANGED_MARK);
-}
-
-function markChildrenAsUnchanged($value)
-{
-    if (hasChildren($value)) {
-        return array_map(fn ($key) => markAsUnchanged($value->$key, $key), getKeys($value));
-    }
-
-    return $value;
 }
 
 function getDescription($value, string $key, string $type): array
@@ -108,7 +98,7 @@ function getDescription($value, string $key, string $type): array
     return compact('type', 'key', 'value');
 }
 
-function hasChildren($value): bool
+function isComplex($value): bool
 {
     return is_object($value);
 }
@@ -123,15 +113,15 @@ function getCheckedData(object $data1, object $data2, string $key): array
     $value1 = $data1->{$key};
     $value2 = $data2->{$key};
 
-    if (hasChildren($value1) && hasChildren($value2)) {
-        return [getDescription(getComparedData($value1, $value2), $key, HAS_CHILDREN_MARK)];
+    if (isComplex($value1) && isComplex($value2)) {
+        return getDescription(getComparedData($value1, $value2), $key, HAS_CHILDREN_MARK);
     }
 
     if (isEqual($value1, $value2)) {
-        return [markAsUnchanged($value1, $key)];
+        return markAsUnchanged($value1, $key);
     }
 
-    return [markAsDeleted($key, $value1), markAsAdded($key, $value2)];
+    return markAsUpdated($key, $value1, $value2);
 }
 
 function getSortedData(array $data): array
@@ -149,8 +139,6 @@ function getSortedData(array $data): array
 
     return $data;
 }
-
-
 
 function getKey(array $elem): string
 {
@@ -180,4 +168,19 @@ function isAdded(array $description): bool
 function isDeleted(array $description): bool
 {
     return getType($description) === DELETED_MARK;
+}
+
+function isUpdated(array $description): bool
+{
+    return getType($description) === UPDATED_MARK;
+}
+
+function isUnchanged(array $description): bool
+{
+    return getType($description) === UNCHANGED_MARK;
+}
+
+function hasChildren(array $description): bool
+{
+    return getType($description) === HAS_CHILDREN_MARK;
 }

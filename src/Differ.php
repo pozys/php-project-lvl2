@@ -3,7 +3,7 @@
 namespace Php\Project\Lvl2\Differ;
 
 use function Php\Project\Lvl2\Comparator\getComparedData;
-use function Php\Project\Lvl2\Formatter\getFormatted;
+use function Php\Project\Lvl2\Formatters\Formatters\getFormattedData;
 use function Php\Project\Lvl2\Parser\getParsedData;
 
 function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'stylish'): string
@@ -17,5 +17,5 @@ function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'sty
 
     $result = getComparedData($data1, $data2);
 
-    return getFormatted($result, $format);
+    return getFormattedData($result, $format);
 }
