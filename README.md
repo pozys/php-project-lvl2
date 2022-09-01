@@ -19,3 +19,6 @@
 
 - Plain
 [![asciicast](https://asciinema.org/a/l5GcdOigrMK9tpFiBikq8Jz5U.svg)](https://asciinema.org/a/l5GcdOigrMK9tpFiBikq8Jz5U)
+
+- Json
+[![asciicast](https://asciinema.org/a/wfaplubtcYsYHlwLEVwOuOQaj.svg)](https://asciinema.org/a/wfaplubtcYsYHlwLEVwOuOQaj)
