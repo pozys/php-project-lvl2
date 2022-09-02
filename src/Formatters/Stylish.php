@@ -79,7 +79,7 @@ function getFormattedRow(string $mark, string $key, $value, int $depth): string
     $mark .= ' ';
     $indent = str_repeat(REPLACER, $depth * 4 - strlen($mark));
 
-    return rtrim("{$indent}{$mark}{$key}: {$value}");
+    return "{$indent}{$mark}{$key}: {$value}";
 }
 
 function getMark($value): string
