@@ -1,6 +1,6 @@
 <?php
 
-namespace Php\Project\Lvl2\Differ;
+namespace Differ\Differ;
 
 use function Php\Project\Lvl2\Comparator\getComparedData;
 use function Php\Project\Lvl2\Formatters\Formatters\getFormattedData;
