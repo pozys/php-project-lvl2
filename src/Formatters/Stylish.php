@@ -72,9 +72,9 @@ function getFormattedObject(object $object, int $depth): string
     );
 
     $bracketIndent = str_repeat(REPLACER, $depth * 4);
-    $result = flatten(['{', $result, "{$bracketIndent}}"]);
+    $result = implode("\n", $result);
 
-    return implode("\n", $result);
+    return "{\n{$result}\n{$bracketIndent}}";
 }
 
 function getFormattedRow(string $mark, string $key, $value, int $depth): string
