@@ -2,8 +2,11 @@
 
 namespace Php\Project\Lvl2\Formatters\Stylish;
 
+use Exception;
+
 use function Php\Project\Lvl2\Comparator\{
     getKey,
+    getKeys,
     getValue,
     isAdded,
     isComplex,
@@ -28,15 +31,15 @@ function getFormattedArray(array $values, int $depth): string
 {
     $result = array_map(function ($description) use ($depth) {
         if (isUpdated($description)) {
-            $result = [];
-            foreach (getValue($description) as $description) {
-                $result[] = getFormattedRow(
+            $result = array_map(
+                fn ($description) => getFormattedRow(
                     getMark($description),
                     getKey($description),
                     getFormatted(getValue($description), $depth + 1),
                     $depth + 1
-                );
-            }
+                ),
+                getValue($description)
+            );
 
             return implode("\n", $result);
         }
@@ -57,16 +60,15 @@ function getFormattedArray(array $values, int $depth): string
 
 function getFormattedObject(object $object, int $depth): string
 {
-    $result = [];
-
-    foreach ($object as $key => $value) {
-        $result[] = getFormattedRow(
+    $result = array_map(
+        fn ($property) => getFormattedRow(
             getMark($object),
-            $key,
-            isComplex($value) ? getFormattedObject($value, $depth + 1) : $value,
+            $property,
+            isComplex($object->$property) ? getFormattedObject($object->$property, $depth + 1) : $object->$property,
             $depth + 1
-        );
-    }
+        ),
+        getKeys($object)
+    );
 
     $bracketIndent = str_repeat(REPLACER, $depth * 4);
     $result = ['{', ...$result, "{$bracketIndent}}"];
@@ -97,7 +99,13 @@ function getMark($value): string
     return $mark;
 }
 
-function toString($value)
+function toString($value): string
 {
-    return str_replace('"', '', json_encode($value));
+    $encodedValue = json_encode($value);
+
+    if ($encodedValue === false) {
+        throw new Exception("Could not encode value {$value}");
+    }
+
+    return str_replace('"', '', $encodedValue);
 }

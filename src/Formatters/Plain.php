@@ -13,7 +13,7 @@ use function Php\Project\Lvl2\Comparator\{
     isUpdated
 };
 
-function getFormatted($value): string
+function getFormatted(array $value): string
 {
     $formattedRows = getFormattedRows($value);
 

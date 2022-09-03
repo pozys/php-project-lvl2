@@ -26,7 +26,7 @@ function getParsedData(string $filePath): object
 function getParser(string $extension): callable
 {
     return function ($data) use ($extension) {
-        if (in_array($extension, ['yaml', 'yml'])) {
+        if (in_array($extension, ['yaml', 'yml'], true)) {
             return Yaml::parse($data, Yaml::PARSE_OBJECT_FOR_MAP);
         } else {
             return json_decode($data);

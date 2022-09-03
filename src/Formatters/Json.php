@@ -2,7 +2,7 @@
 
 namespace Php\Project\Lvl2\Formatters\Json;
 
-function getFormatted($value)
+function getFormatted(array $value)
 {
     return json_encode($value, JSON_PRETTY_PRINT);
 }
