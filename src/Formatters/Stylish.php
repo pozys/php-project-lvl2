@@ -4,6 +4,7 @@ namespace Php\Project\Lvl2\Formatters\Stylish;
 
 use Exception;
 
+use function Functional\flatten;
 use function Php\Project\Lvl2\Comparator\{
     getKey,
     getKeys,
@@ -71,7 +72,7 @@ function getFormattedObject(object $object, int $depth): string
     );
 
     $bracketIndent = str_repeat(REPLACER, $depth * 4);
-    $result = array_merge(['{'], $result, ["{$bracketIndent}}"]);
+    $result = flatten(['{', $result, "{$bracketIndent}}"]);
 
     return implode("\n", $result);
 }
