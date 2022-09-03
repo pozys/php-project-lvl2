@@ -30,7 +30,7 @@ function getFormatted($value, int $depth = 0)
 
 function getFormattedArray(array $values, int $depth): string
 {
-    $result = array_map(function ($description) use ($depth) {
+    $formattedRows = array_map(function ($description) use ($depth) {
         if (isUpdated($description)) {
             $result = array_map(
                 fn ($description) => getFormattedRow(
@@ -54,14 +54,14 @@ function getFormattedArray(array $values, int $depth): string
     }, $values);
 
     $bracketIndent = str_repeat(REPLACER, $depth * 4);
-    $result = ['{', ...$result, "{$bracketIndent}}"];
+    $result = ['{', ...$formattedRows, "{$bracketIndent}}"];
 
     return implode("\n", $result);
 }
 
 function getFormattedObject(object $object, int $depth): string
 {
-    $result = array_map(
+    $formattedRows = array_map(
         fn ($property) => getFormattedRow(
             getMark($object),
             $property,
@@ -72,9 +72,9 @@ function getFormattedObject(object $object, int $depth): string
     );
 
     $bracketIndent = str_repeat(REPLACER, $depth * 4);
-    $resultString = implode("\n", $result);
+    $result = ['{', ...$formattedRows, "{$bracketIndent}}"];
 
-    return "{\n{$resultString}\n{$bracketIndent}}";
+    return implode("\n", $result);
 }
 
 function getFormattedRow(string $mark, string $key, $value, int $depth): string
