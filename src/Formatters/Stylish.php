@@ -71,7 +71,7 @@ function getFormattedObject(object $object, int $depth): string
     );
 
     $bracketIndent = str_repeat(REPLACER, $depth * 4);
-    $result = ['{', ...$result, "{$bracketIndent}}"];
+    $result = array_merge(['{'], $result, ["{$bracketIndent}}"]);
 
     return implode("\n", $result);
 }
