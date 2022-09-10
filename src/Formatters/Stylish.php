@@ -17,7 +17,7 @@ use function Php\Project\Lvl2\Comparator\{
 
 const REPLACER = ' ';
 
-function getFormatted($value, int $depth = 0)
+function getFormatted(mixed $value, int $depth = 0)
 {
 
     if (is_object($value)) {
@@ -91,7 +91,7 @@ function getFormattedObject(object $object, int $depth): string
     return implode("\n", $result);
 }
 
-function getFormattedRow(string $mark, string $key, $value, int $depth): string
+function getFormattedRow(string $mark, string $key, mixed $value, int $depth): string
 {
     $markWithIndent = $mark . ' ';
     $indent = str_repeat(REPLACER, $depth * 4 - strlen($markWithIndent));
@@ -99,7 +99,7 @@ function getFormattedRow(string $mark, string $key, $value, int $depth): string
     return "{$indent}{$markWithIndent}{$key}: {$value}";
 }
 
-function getMark($value): string
+function getMark(mixed $value): string
 {
     if (isComplex($value)) {
         $mark = ' ';
@@ -114,7 +114,7 @@ function getMark($value): string
     return $mark;
 }
 
-function toString($value): string
+function toString(mixed $value): string
 {
     $encodedValue = json_encode($value);
 

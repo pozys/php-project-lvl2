@@ -8,7 +8,7 @@ use function Php\Project\Lvl2\Formatters\Stylish\getFormatted as GetStylishForma
 
 const ALLOWED_FORMATS = ['stylish', 'plain', 'json'];
 
-function getFormattedData($value, string $format): string
+function getFormattedData(mixed $value, string $format): string
 {
     if (!in_array($format, ALLOWED_FORMATS)) {
         return 'Unknown format!';

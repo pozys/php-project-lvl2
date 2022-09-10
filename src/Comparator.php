@@ -43,7 +43,7 @@ function getDeleted(object $data1, object $data2): array
     return array_map(fn ($value) => markAsDeleted($value), $deletedValues);
 }
 
-function getKeys($values)
+function getKeys(mixed $values)
 {
     if (is_object($values)) {
         $values = get_object_vars($values);
@@ -72,29 +72,29 @@ function getCheckingValues(object $original, array $added, array $deleted): arra
     );
 }
 
-function markAsAdded($value): array
+function markAsAdded(mixed $value): array
 {
     return getDescription(ADDED_MARK, $value);
 }
 
-function markAsDeleted($value): array
+function markAsDeleted(mixed $value): array
 {
     return getDescription(DELETED_MARK, $value);
 }
 
-function markAsUpdated($oldValue, $newValue): array
+function markAsUpdated(mixed $oldValue, mixed $newValue): array
 {
     $value = [getDescription(DELETED_MARK, $oldValue), getDescription(ADDED_MARK, $newValue)];
 
     return getDescription(UPDATED_MARK, null, $value);
 }
 
-function markAsUnchanged($value): array
+function markAsUnchanged(mixed $value): array
 {
     return getDescription(UNCHANGED_MARK, $value);
 }
 
-function getDescription(string $type, $value = null, array $children = []): array
+function getDescription(string $type, mixed $value = null, array $children = []): array
 {
     $properties = ['type'];
     $properties[] = empty($children) ? 'value' : 'children';
@@ -102,12 +102,12 @@ function getDescription(string $type, $value = null, array $children = []): arra
     return compact($properties);
 }
 
-function isComplex($value): bool
+function isComplex(mixed $value): bool
 {
     return is_object($value);
 }
 
-function isEqual($value1, $value2): bool
+function isEqual(mixed $value1, mixed $value2): bool
 {
     return $value1 === $value2;
 }
@@ -148,7 +148,7 @@ function getValue(array $elem)
     return $elem['value'];
 }
 
-function setValue(array $elem, $value)
+function setValue(array $elem, mixed $value)
 {
     return $elem['value'] = $value;
 }

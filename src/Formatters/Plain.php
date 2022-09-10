@@ -63,7 +63,7 @@ function getFormattedRow(array $description, array $pathToProperty): string
     return "Property '{$pathToProperty}' {$actionDescription}";
 }
 
-function getFormattedValue($value): string
+function getFormattedValue(mixed $value): string
 {
     if (isComplex($value)) {
         return '[complex value]';
@@ -74,7 +74,7 @@ function getFormattedValue($value): string
     return is_string($value) ? "'{$formattedValue}'" : $formattedValue;
 }
 
-function toString($value)
+function toString(mixed $value)
 {
     return str_replace('"', '', json_encode($value));
 }
