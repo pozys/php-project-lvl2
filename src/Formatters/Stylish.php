@@ -4,11 +4,11 @@ namespace Php\Project\Lvl2\Formatters\Stylish;
 
 use Exception;
 
-use function Functional\flatten;
 use function Php\Project\Lvl2\Comparator\{
-    getKey,
+    getChildren,
     getKeys,
     getValue,
+    hasChildren,
     isAdded,
     isComplex,
     isDeleted,
@@ -19,6 +19,7 @@ const REPLACER = ' ';
 
 function getFormatted($value, int $depth = 0)
 {
+
     if (is_object($value)) {
         return getFormattedObject($value, $depth);
     } elseif (is_array($value)) {
@@ -30,28 +31,41 @@ function getFormatted($value, int $depth = 0)
 
 function getFormattedArray(array $values, int $depth): string
 {
-    $formattedRows = array_map(function ($description) use ($depth) {
+    $formattedRows = array_map(function ($key) use ($values, $depth) {
+        $description = $values[$key];
         if (isUpdated($description)) {
-            $result = array_map(
-                fn ($description) => getFormattedRow(
-                    getMark($description),
-                    getKey($description),
-                    getFormatted(getValue($description), $depth + 1),
-                    $depth + 1
-                ),
-                getValue($description)
-            );
+            $changedValues = getChildren($description);
+
+            $result = array_map(fn (
+                $description
+            ) => getFormattedRow(
+                getMark($description),
+                $key,
+                getFormatted(getValue($description), $depth + 1),
+                $depth + 1
+            ), $changedValues);
 
             return implode("\n", $result);
         }
 
+        if (hasChildren($description)) {
+            $children = getChildren($description);
+
+            return getFormattedRow(
+                getMark($description),
+                $key,
+                getFormattedArray($children, $depth + 1),
+                $depth + 1
+            );
+        }
+
         return getFormattedRow(
             getMark($description),
-            getKey($description),
+            $key,
             getFormatted(getValue($description), $depth + 1),
             $depth + 1
         );
-    }, $values);
+    }, array_keys($values));
 
     $bracketIndent = str_repeat(REPLACER, $depth * 4);
     $result = ['{', ...$formattedRows, "{$bracketIndent}}"];
@@ -79,10 +93,10 @@ function getFormattedObject(object $object, int $depth): string
 
 function getFormattedRow(string $mark, string $key, $value, int $depth): string
 {
-    $mark .= ' ';
-    $indent = str_repeat(REPLACER, $depth * 4 - strlen($mark));
+    $markWithIndent = $mark . ' ';
+    $indent = str_repeat(REPLACER, $depth * 4 - strlen($markWithIndent));
 
-    return "{$indent}{$mark}{$key}: {$value}";
+    return "{$indent}{$markWithIndent}{$key}: {$value}";
 }
 
 function getMark($value): string

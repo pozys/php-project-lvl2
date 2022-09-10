@@ -2,8 +2,9 @@
 
 namespace Php\Project\Lvl2\Formatters\Plain;
 
+use function Functional\flatten;
 use function Php\Project\Lvl2\Comparator\{
-    getKey,
+    getChildren,
     getValue,
     hasChildren,
     isAdded,
@@ -13,49 +14,45 @@ use function Php\Project\Lvl2\Comparator\{
     isUpdated
 };
 
-function getFormatted(array $value): string
+function getFormatted(array $data): string
 {
-    $formattedRows = getFormattedRows($value);
+    $formattedRows = getFormattedRows($data);
 
     return implode("\n", $formattedRows);
 }
 
 function getFormattedRows(array $values, array $pathToProperty = []): array
 {
-    $rows = array_reduce(
-        $values,
-        function (array $carry, $description) use ($pathToProperty) {
-            $pathToProperty[] = getKey($description);
+    $rows = array_map(
+        function (string $key) use ($values, $pathToProperty) {
+            $description = $values[$key];
+            $pathToProperty[] = $key;
             if (isUnchanged($description)) {
-                return $carry;
+                return [];
             }
 
             if (hasChildren($description)) {
-                return [...$carry, ...getFormattedRows(getValue($description), $pathToProperty)];
+                return [...getFormattedRows(getChildren($description), $pathToProperty)];
             }
 
-            $carry[] = getFormattedRow($description, $pathToProperty);
-
-            return $carry;
+            return [getFormattedRow($description, $pathToProperty)];
         },
-        []
+        array_keys($values)
     );
 
-    return $rows;
+    return flatten($rows);
 }
 
 function getFormattedRow(array $description, array $pathToProperty): string
 {
-    $value = getValue($description);
-
     if (isAdded($description)) {
-        $formattedValue = getFormattedValue($value);
+        $formattedValue = getFormattedValue(getValue($description));
         $actionDescription =  "was added with value: {$formattedValue}";
     } elseif (isDeleted($description)) {
-        $formattedValue = getFormattedValue($value);
+        $formattedValue = getFormattedValue(getValue($description));
         $actionDescription =  "was removed";
     } elseif (isUpdated($description)) {
-        [$deleted, $added] = $value;
+        [$deleted, $added] = getChildren($description);
         $deletedValue = getFormattedValue(getValue($deleted));
         $addedValue = getFormattedValue(getValue($added));
         $actionDescription =  "was updated. From {$deletedValue} to {$addedValue}";

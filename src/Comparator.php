@@ -2,6 +2,8 @@
 
 namespace Php\Project\Lvl2\Comparator;
 
+use function Functional\sort;
+
 const ADDED_MARK = 'added';
 const DELETED_MARK = 'deleted';
 const HAS_CHILDREN_MARK = 'hasChildren';
@@ -21,16 +23,15 @@ function getDifferences(object $data1, object $data2): array
     $added = getAdded($data1, $data2);
 
     $checkingValues = getCheckingValues($data1, $added, $deleted);
-
-    $compared = array_reduce(
-        array_keys($checkingValues),
-        function ($carry, $key) use ($data1, $data2) {
-            $carry[] = getCheckedData($data1, $data2, $key);
-
-            return $carry;
+    $checkingKeys = array_keys($checkingValues);
+    $comparedValues = array_map(
+        function ($key) use ($data1, $data2) {
+            return getCheckedData($data1, $data2, $key);
         },
-        []
+        array_keys($checkingValues)
     );
+
+    $compared = array_combine($checkingKeys, $comparedValues);
 
     return array_merge($deleted, $added, $compared);
 }
@@ -39,7 +40,7 @@ function getDeleted(object $data1, object $data2): array
 {
     $deletedValues = array_diff_key(get_object_vars($data1), get_object_vars($data2));
 
-    return array_map(fn ($key) => markAsDeleted($key, $deletedValues[$key]), array_keys($deletedValues));
+    return array_map(fn ($value) => markAsDeleted($value), $deletedValues);
 }
 
 function getKeys($values)
@@ -59,43 +60,46 @@ function getAdded(object $data1, object $data2): array
 {
     $addedValues = array_diff_key(get_object_vars($data2), get_object_vars($data1));
 
-    return array_map(fn ($key) => markAsAdded($key, $addedValues[$key]), array_keys($addedValues));
+    return array_map(fn ($value) => markAsAdded($value), $addedValues);
 }
 
 function getCheckingValues(object $original, array $added, array $deleted): array
 {
     return array_diff_key(
         get_object_vars($original),
-        array_column($added, 'value', 'key'),
-        array_column($deleted, 'value', 'key')
+        $added,
+        $deleted
     );
 }
 
-function markAsAdded(string $key, $value): array
+function markAsAdded($value): array
 {
-    return getDescription($value, $key, ADDED_MARK);
+    return getDescription(ADDED_MARK, $value);
 }
 
-function markAsDeleted(string $key, $value): array
+function markAsDeleted($value): array
 {
-    return getDescription($value, $key, DELETED_MARK);
+    return getDescription(DELETED_MARK, $value);
 }
 
-function markAsUpdated(string $key, $oldValue, $newValue): array
+function markAsUpdated($oldValue, $newValue): array
 {
-    $value = [getDescription($oldValue, $key, DELETED_MARK), getDescription($newValue, $key, ADDED_MARK)];
+    $value = [getDescription(DELETED_MARK, $oldValue), getDescription(ADDED_MARK, $newValue)];
 
-    return getDescription($value, $key, UPDATED_MARK);
+    return getDescription(UPDATED_MARK, null, $value);
 }
 
-function markAsUnchanged($value, string $key): array
+function markAsUnchanged($value): array
 {
-    return getDescription($value, $key, UNCHANGED_MARK);
+    return getDescription(UNCHANGED_MARK, $value);
 }
 
-function getDescription($value, string $key, string $type): array
+function getDescription(string $type, $value = null, array $children = []): array
 {
-    return compact('type', 'key', 'value');
+    $properties = ['type'];
+    $properties[] = empty($children) ? 'value' : 'children';
+
+    return compact($properties);
 }
 
 function isComplex($value): bool
@@ -114,35 +118,29 @@ function getCheckedData(object $data1, object $data2, string $key): array
     $value2 = $data2->{$key};
 
     if (isComplex($value1) && isComplex($value2)) {
-        return getDescription(getComparedData($value1, $value2), $key, HAS_CHILDREN_MARK);
+        return getDescription(HAS_CHILDREN_MARK, null, (getComparedData($value1, $value2)));
     }
 
     if (isEqual($value1, $value2)) {
-        return markAsUnchanged($value1, $key);
+        return markAsUnchanged($value1);
     }
 
-    return markAsUpdated($key, $value1, $value2);
+    return markAsUpdated($value1, $value2);
 }
 
 function getSortedData(array $data): array
 {
-    uasort(
-        $data,
-        function ($elem1, $elem2) {
-            if (getKey($elem1) === getKey($elem2)) {
-                return getType($elem1) === DELETED_MARK ? -1 : 1;
-            }
-
-            return getKey($elem1) <=> getKey($elem2);
+    $sortedKeys = sort(array_keys($data), function ($elem1, $elem2) use ($data) {
+        if (strcmp($elem1, $elem2) === 0) {
+            return getType($data[$elem1]) === DELETED_MARK ? -1 : 1;
         }
-    );
 
-    return $data;
-}
+        return strcmp($elem1, $elem2);
+    });
 
-function getKey(array $elem): string
-{
-    return $elem['key'];
+    $sortedValues = array_map(fn ($key) => $data[$key], $sortedKeys);
+
+    return array_combine($sortedKeys, $sortedValues);
 }
 
 function getValue(array $elem)
@@ -183,4 +181,9 @@ function isUnchanged(array $description): bool
 function hasChildren(array $description): bool
 {
     return getType($description) === HAS_CHILDREN_MARK;
+}
+
+function getChildren(array $description): array
+{
+    return $description['children'];
 }
