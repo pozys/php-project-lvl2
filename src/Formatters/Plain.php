@@ -28,16 +28,16 @@ function getFormattedRows(array $values, array $pathToProperty = []): array
     $rows = array_map(
         function (string $key) use ($values, $pathToProperty) {
             $description = $values[$key];
-            $pathToProperty = [...$pathToProperty, $key];
+
             if (isUnchanged($description)) {
                 return [];
             }
 
             if (hasChildren($description)) {
-                return [...getFormattedRows(getChildren($description), $pathToProperty)];
+                return [...getFormattedRows(getChildren($description), [...$pathToProperty, $key])];
             }
 
-            return [getFormattedRow($description, $pathToProperty)];
+            return [getFormattedRow($description, [...$pathToProperty, $key])];
         },
         array_keys($values)
     );
