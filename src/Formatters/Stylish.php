@@ -6,7 +6,6 @@ use Exception;
 
 use function Php\Project\Lvl2\Comparator\{
     getChildren,
-    getKeys,
     getValue,
     hasChildren,
     isAdded,
@@ -81,7 +80,7 @@ function getFormattedObject(object $object, int $depth): string
             isComplex($object->$property) ? getFormattedObject($object->$property, $depth + 1) : $object->$property,
             $depth + 1
         ),
-        getKeys($object)
+        array_keys(get_object_vars($object))
     );
 
     $bracketIndent = str_repeat(REPLACER, $depth * 4);

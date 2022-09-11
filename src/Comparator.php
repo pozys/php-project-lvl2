@@ -45,19 +45,6 @@ function getDeleted(object $data1, object $data2): array
     return array_map(fn ($value) => markAsDeleted($value), $deletedValues);
 }
 
-function getKeys(mixed $values)
-{
-    if (is_object($values)) {
-        $values = get_object_vars($values);
-    }
-
-    if (is_array($values)) {
-        return array_keys($values);
-    }
-
-    return $values;
-}
-
 function getAdded(object $data1, object $data2): array
 {
     $addedValues = array_diff_key(get_object_vars($data2), get_object_vars($data1));

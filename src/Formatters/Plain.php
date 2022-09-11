@@ -28,7 +28,7 @@ function getFormattedRows(array $values, array $pathToProperty = []): array
     $rows = array_map(
         function (string $key) use ($values, $pathToProperty) {
             $description = $values[$key];
-            $pathToProperty[] = $key;
+            $pathToProperty = [...$pathToProperty, $key];
             if (isUnchanged($description)) {
                 return [];
             }
