@@ -97,7 +97,7 @@ function markAsUnchanged(mixed $value): array
 function getDescription(string $type, mixed $value = null, array $children = []): array
 {
     $properties = ['type'];
-    $properties[] = empty($children) ? 'value' : 'children';
+    $properties[] = $children === [] ? 'value' : 'children';
 
     return compact($properties);
 }
