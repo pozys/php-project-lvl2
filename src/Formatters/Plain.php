@@ -2,6 +2,8 @@
 
 namespace Php\Project\Lvl2\Formatters\Plain;
 
+use Exception;
+
 use function Functional\flatten;
 use function Php\Project\Lvl2\Comparator\{
     getChildren,
@@ -56,11 +58,14 @@ function getFormattedRow(array $description, array $pathToProperty): string
         $deletedValue = getFormattedValue(getValue($deleted));
         $addedValue = getFormattedValue(getValue($added));
         $actionDescription =  "was updated. From {$deletedValue} to {$addedValue}";
+    } else {
+        $encodedDescription = var_export($description, true);
+        throw new Exception("Uknown type of description: \n {$encodedDescription}");
     }
 
-    $pathToProperty = implode('.', $pathToProperty);
+    $fullNameProperty = implode('.', $pathToProperty);
 
-    return "Property '{$pathToProperty}' {$actionDescription}";
+    return "Property '{$fullNameProperty}' {$actionDescription}";
 }
 
 function getFormattedValue(mixed $value): string
@@ -76,5 +81,11 @@ function getFormattedValue(mixed $value): string
 
 function toString(mixed $value)
 {
-    return str_replace('"', '', json_encode($value));
+    $encodedValue = json_encode($value);
+
+    if ($encodedValue === false) {
+        throw new Exception("Could not encode value {$value}");
+    }
+
+    return str_replace('"', '', $encodedValue);
 }

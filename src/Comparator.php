@@ -2,6 +2,8 @@
 
 namespace Php\Project\Lvl2\Comparator;
 
+use Exception;
+
 use function Functional\sort;
 
 const ADDED_MARK = 'added';
@@ -96,8 +98,7 @@ function markAsUnchanged(mixed $value): array
 
 function getDescription(string $type, mixed $value = null, array $children = []): array
 {
-    $properties = ['type'];
-    $properties[] = $children === [] ? 'value' : 'children';
+    $properties = ['type', $children === [] ? 'value' : 'children'];
 
     return compact($properties);
 }
@@ -146,11 +147,6 @@ function getSortedData(array $data): array
 function getValue(array $elem)
 {
     return $elem['value'];
-}
-
-function setValue(array $elem, mixed $value)
-{
-    return $elem['value'] = $value;
 }
 
 function getType(array $elem): string

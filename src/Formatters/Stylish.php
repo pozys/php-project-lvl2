@@ -19,7 +19,6 @@ const REPLACER = ' ';
 
 function getFormatted(mixed $value, int $depth = 0)
 {
-
     if (is_object($value)) {
         return getFormattedObject($value, $depth);
     } elseif (is_array($value)) {

@@ -11,10 +11,6 @@ function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'sty
     $data1 = getParsedData($pathToFile1);
     $data2 = getParsedData($pathToFile2);
 
-    if (is_null($data1) || is_null($data2)) {
-        return 'Произошла ошибка при обработке файлов';
-    }
-
     $result = getComparedData($data1, $data2);
 
     return getFormattedData($result, $format);
