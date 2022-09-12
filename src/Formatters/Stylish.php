@@ -65,10 +65,7 @@ function getFormattedArray(array $values, int $depth): string
         );
     }, array_keys($values));
 
-    $bracketIndent = str_repeat(REPLACER, $depth * 4);
-    $result = ['{', ...$formattedRows, "{$bracketIndent}}"];
-
-    return implode("\n", $result);
+    return formattedRowsToString($formattedRows, $depth);
 }
 
 function getFormattedObject(object $object, int $depth): string
@@ -83,8 +80,13 @@ function getFormattedObject(object $object, int $depth): string
         array_keys(get_object_vars($object))
     );
 
+    return formattedRowsToString($formattedRows, $depth);
+}
+
+function formattedRowsToString(array $rows, int $depth)
+{
     $bracketIndent = str_repeat(REPLACER, $depth * 4);
-    $result = ['{', ...$formattedRows, "{$bracketIndent}}"];
+    $result = ['{', ...$rows, "{$bracketIndent}}"];
 
     return implode("\n", $result);
 }

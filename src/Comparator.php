@@ -2,8 +2,6 @@
 
 namespace Php\Project\Lvl2\Comparator;
 
-use Exception;
-
 use function Functional\sort;
 
 const ADDED_MARK = 'added';
