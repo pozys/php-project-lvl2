@@ -16,7 +16,7 @@ use function Differ\Differ\{
 
 const REPLACER = ' ';
 
-function getFormatted(mixed $value, int $depth = 0)
+function getFormatted(mixed $value, int $depth = 0): string
 {
     if (is_object($value)) {
         return getFormattedObject($value, $depth);
