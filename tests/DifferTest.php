@@ -60,10 +60,24 @@ class DifferTest extends TestCase
         $this->runAsserting($expected, 'plain');
     }
 
-    public function testJsonFormatted()
-    {
-        $expected = $this->getExpected('expected-json');
+    // public function testJsonFormatted()
+    // {
+    //     $expected = $this->getExpected('expected-json');
 
-        $this->runAsserting($expected, 'json');
+    //     $this->runAsserting($expected, 'json');
+    // }
+
+    public function testJsonFormattedJson()
+    {
+        $expected = file_get_contents('tests/fixtures/expected-json');
+
+        $this->assertEquals($expected, getFormattedData(genDiff('tests/fixtures/file1.json', 'tests/fixtures/file2.json'), 'json'));
+    }
+
+    public function testJsonFormattedYaml()
+    {
+        $expected = file_get_contents('tests/fixtures/expected-json');
+
+        $this->assertEquals($expected, getFormattedData(genDiff('tests/fixtures/file1.yml', 'tests/fixtures/file2.yml'), 'json'));
     }
 }
