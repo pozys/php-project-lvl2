@@ -2,8 +2,9 @@
 
 namespace Differ\Differ;
 
-use function Php\Project\Lvl2\Parser\getParsedData;
 use function Functional\sort;
+use function Php\Project\Lvl2\Parser\getParsedData;
+use function Php\Project\Lvl2\Formatters\getFormattedData;
 
 const ADDED_MARK = 'added';
 const DELETED_MARK = 'deleted';
@@ -11,12 +12,14 @@ const HAS_CHILDREN_MARK = 'hasChildren';
 const UNCHANGED_MARK = 'unchanged';
 const UPDATED_MARK = 'updated';
 
-function genDiff(string $pathToFile1, string $pathToFile2): array
+function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'stylish'): string
 {
     $data1 = getParsedData($pathToFile1);
     $data2 = getParsedData($pathToFile2);
 
-    return getComparedData($data1, $data2);
+    $comparedData = getComparedData($data1, $data2);
+
+    return getFormattedData($comparedData, $format);
 }
 
 function getComparedData(object $data1, object $data2): array

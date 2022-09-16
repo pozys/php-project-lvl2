@@ -5,7 +5,6 @@ namespace Php\Project\Lvl2\tests;
 use PHPUnit\Framework\TestCase;
 
 use function Differ\Differ\genDiff;
-use function Php\Project\Lvl2\Formatters\getFormattedData;
 
 class DifferTest extends TestCase
 {
@@ -22,19 +21,20 @@ class DifferTest extends TestCase
 
     public function runAsserting(string $expected, string $format = 'stylish')
     {
-        print_r("{$format}\n");
         $this->assertEquals(
             $expected,
-            getFormattedData(
-                genDiff($this->getFixtureFullPath('file1.json'), $this->getFixtureFullPath('file2.json')),
+            genDiff(
+                $this->getFixtureFullPath('file1.json'),
+                $this->getFixtureFullPath('file2.json'),
                 $format
             )
         );
 
         $this->assertEquals(
             $expected,
-            getFormattedData(
-                genDiff($this->getFixtureFullPath('file1.yml'), $this->getFixtureFullPath('file2.yml')),
+            genDiff(
+                $this->getFixtureFullPath('file1.yml'),
+                $this->getFixtureFullPath('file2.yml'),
                 $format
             )
         );
