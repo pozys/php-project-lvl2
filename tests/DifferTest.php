@@ -71,13 +71,19 @@ class DifferTest extends TestCase
     {
         $expected = file_get_contents('tests/fixtures/expected-json');
 
-        $this->assertEquals($expected, getFormattedData(genDiff('tests/fixtures/file1.json', 'tests/fixtures/file2.json'), 'json'));
+        $this->assertEquals(
+            $expected,
+            getFormattedData(genDiff('tests/fixtures/file1.json', 'tests/fixtures/file2.json'), 'json')
+        );
     }
 
     public function testJsonFormattedYaml()
     {
         $expected = file_get_contents('tests/fixtures/expected-json');
 
-        $this->assertEquals($expected, getFormattedData(genDiff('tests/fixtures/file1.yml', 'tests/fixtures/file2.yml'), 'json'));
+        $this->assertEquals(
+            $expected,
+            getFormattedData(genDiff('tests/fixtures/file1.yml', 'tests/fixtures/file2.yml'), 'json')
+        );
     }
 }
