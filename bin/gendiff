@@ -5,14 +5,32 @@
 $autoloadPath1 = __DIR__ . '/../../../autoload.php';
 $autoloadPath2 = __DIR__ . '/../vendor/autoload.php';
 if (file_exists($autoloadPath1)) {
-    require_once $autoloadPath1;
+  require_once $autoloadPath1;
 } else {
-    require_once $autoloadPath2;
+  require_once $autoloadPath2;
 }
 
 use function Differ\Differ\genDiff;
-use function Php\Project\Lvl2\Helpdoc\getHelpText;
+use function Php\Project\Lvl2\Formatters\getFormattedData;
 
-$args = Docopt::handle(getHelpText());
+$help = <<<DOC
+Generate diff
 
-print_r(genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']) . "\n");
+Usage:
+  gendiff (-h|--help)
+  gendiff (-v|--version)
+  gendiff [--format <fmt>] <firstFile> <secondFile>
+
+Options:
+  -h --help                     Show this screen
+  -v --version                  Show version
+  --format <fmt>                Report format [default: stylish]
+
+DOC;
+
+$args = Docopt::handle($help);
+
+$comparedData = genDiff($args['<firstFile>'], $args['<secondFile>']);
+$formattedData = getFormattedData($comparedData, $args['--format']);
+
+print_r($formattedData . "\n");

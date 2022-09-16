@@ -4,7 +4,7 @@ namespace Php\Project\Lvl2\Formatters\Stylish;
 
 use Exception;
 
-use function Php\Project\Lvl2\Comparator\{
+use function Differ\Differ\{
     getChildren,
     getValue,
     hasChildren,

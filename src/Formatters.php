@@ -1,6 +1,6 @@
 <?php
 
-namespace Php\Project\Lvl2\Formatters\Formatters;
+namespace Php\Project\Lvl2\Formatters;
 
 use Exception;
 
@@ -8,7 +8,7 @@ use function Php\Project\Lvl2\Formatters\Json\getFormatted as getJsonFormatted;
 use function Php\Project\Lvl2\Formatters\Plain\getFormatted as GetPlainFormatted;
 use function Php\Project\Lvl2\Formatters\Stylish\getFormatted as GetStylishFormatted;
 
-function getFormattedData(mixed $value, string $format): string
+function getFormattedData(mixed $value, string $format = 'stylish'): string
 {
     $formatter = getFormatter($format);
 

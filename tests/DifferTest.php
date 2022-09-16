@@ -5,48 +5,65 @@ namespace Php\Project\Lvl2\tests;
 use PHPUnit\Framework\TestCase;
 
 use function Differ\Differ\genDiff;
+use function Php\Project\Lvl2\Formatters\getFormattedData;
 
 class DifferTest extends TestCase
 {
-    public function testStylishFormattedJson()
+    public function getFixtureFullPath($fixtureName)
     {
-        $expected = file_get_contents('tests/fixtures/expected-stylish');
-
-        $this->assertEquals($expected, genDiff('tests/fixtures/file1.json', 'tests/fixtures/file2.json'));
+        $parts = [__DIR__, 'fixtures', $fixtureName];
+        return realpath(implode('/', $parts));
     }
 
-    public function testStylishFormattedYaml()
+    public function getExpected(string $fileName)
     {
-        $expected = file_get_contents('tests/fixtures/expected-stylish');
-
-        $this->assertEquals($expected, genDiff('tests/fixtures/file1.yml', 'tests/fixtures/file2.yml'));
+        return file_get_contents($this->getFixtureFullPath($fileName));
     }
 
-    public function testPlainFormattedJson()
+    public function runAsserting(string $expected, string $format = 'stylish')
     {
-        $expected = file_get_contents('tests/fixtures/expected-plain');
+        $this->assertEquals(
+            $expected,
+            getFormattedData(
+                genDiff($this->getFixtureFullPath('file1.json'), $this->getFixtureFullPath('file2.json')),
+                $format
+            )
+        );
 
-        $this->assertEquals($expected, genDiff('tests/fixtures/file1.json', 'tests/fixtures/file2.json', 'plain'));
+        $this->assertEquals(
+            $expected,
+            getFormattedData(
+                genDiff($this->getFixtureFullPath('file1.yml'), $this->getFixtureFullPath('file2.yml')),
+                $format
+            )
+        );
     }
 
-    public function testPlainFormattedYaml()
+    public function testByDefaultFormatted()
     {
-        $expected = file_get_contents('tests/fixtures/expected-plain');
+        $expected = $this->getExpected('expected-stylish');
 
-        $this->assertEquals($expected, genDiff('tests/fixtures/file1.yml', 'tests/fixtures/file2.yml', 'plain'));
+        $this->runAsserting($expected);
     }
 
-    public function testJsonFormattedJson()
+    public function testStylishFormatted()
     {
-        $expected = file_get_contents('tests/fixtures/expected-json');
+        $expected = $this->getExpected('expected-stylish');
 
-        $this->assertEquals($expected, genDiff('tests/fixtures/file1.json', 'tests/fixtures/file2.json', 'json'));
+        $this->runAsserting($expected, 'stylish');
     }
 
-    public function testJsonFormattedYaml()
+    public function testPlainFormatted()
     {
-        $expected = file_get_contents('tests/fixtures/expected-json');
+        $expected = $this->getExpected('expected-plain');
 
-        $this->assertEquals($expected, genDiff('tests/fixtures/file1.yml', 'tests/fixtures/file2.yml', 'json'));
+        $this->runAsserting($expected, 'plain');
+    }
+
+    public function testJsonFormatted()
+    {
+        $expected = $this->getExpected('expected-json');
+
+        $this->runAsserting($expected, 'json');
     }
 }

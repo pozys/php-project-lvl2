@@ -5,7 +5,7 @@ namespace Php\Project\Lvl2\Formatters\Plain;
 use Exception;
 
 use function Functional\flatten;
-use function Php\Project\Lvl2\Comparator\{
+use function Differ\Differ\{
     getChildren,
     getValue,
     hasChildren,

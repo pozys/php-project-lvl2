@@ -13,11 +13,9 @@
     ],
     "autoload": {
         "files": [
-            "src/Helpdoc.php",
             "src/Differ.php",
             "src/Parsers.php",            
-            "src/Comparator.php",
-            "src/Formatters/Formatters.php",
+            "src/Formatters.php",
             "src/Formatters/Json.php",
             "src/Formatters/Stylish.php",
             "src/Formatters/Plain.php"
