@@ -28,8 +28,8 @@ function getParser(string $extension): callable
 {
     return function ($data) use ($extension) {
         switch ($extension) {
-            case 'yml';
-            case 'yaml';
+            case 'yml':
+            case 'yaml':
                 return Yaml::parse($data, Yaml::PARSE_OBJECT_FOR_MAP);
             case 'json':
                 return json_decode($data);
