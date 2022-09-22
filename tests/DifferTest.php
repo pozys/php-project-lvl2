@@ -8,7 +8,7 @@ use function Differ\Differ\genDiff;
 
 class DifferTest extends TestCase
 {
-    public function getFixtureFullPath($fixtureName)
+    public function getFixtureFullPath($fixtureName): string
     {
         $parts = [__DIR__, 'fixtures', $fixtureName];
         return realpath(implode('/', $parts));
@@ -19,52 +19,54 @@ class DifferTest extends TestCase
         return file_get_contents($this->getFixtureFullPath($fileName));
     }
 
-    public function runAsserting(string $expected, string $format = 'stylish')
+    public function fileProvider(): array
     {
-        $this->assertEquals(
-            $expected,
-            genDiff(
+        return [
+            'JSON-files' => [
                 $this->getFixtureFullPath('file1.json'),
                 $this->getFixtureFullPath('file2.json'),
-                $format
-            )
-        );
-
-        $this->assertEquals(
-            $expected,
-            genDiff(
+            ],
+            'YAML-files' => [
                 $this->getFixtureFullPath('file1.yml'),
                 $this->getFixtureFullPath('file2.yml'),
-                $format
-            )
-        );
+            ],
+        ];
     }
 
-    public function testByDefaultFormatted()
+    /**
+     * @dataProvider fileProvider
+     */
+    public function testByDefaultFormatted($file1, $file2): void
     {
         $expected = $this->getExpected('expected-stylish');
 
-        $this->runAsserting($expected);
+        $this->assertEquals($expected, genDiff($file1, $file2));
     }
 
-    public function testStylishFormatted()
+    /**
+     * @dataProvider fileProvider
+     */
+    public function testStylishFormatted($file1, $file2): void
     {
         $expected = $this->getExpected('expected-stylish');
-
-        $this->runAsserting($expected, 'stylish');
+        $this->assertEquals($expected, genDiff($file1, $file2, 'stylish'));
     }
 
-    public function testPlainFormatted()
+    /**
+     * @dataProvider fileProvider
+     */
+    public function testPlainFormatted($file1, $file2): void
     {
         $expected = $this->getExpected('expected-plain');
-
-        $this->runAsserting($expected, 'plain');
+        $this->assertEquals($expected, genDiff($file1, $file2, 'plain'));
     }
 
-    public function testJsonFormatted()
+    /**
+     * @dataProvider fileProvider
+     */
+    public function testJsonFormatted($file1, $file2): void
     {
         $expected = $this->getExpected('expected-json');
-
-        $this->runAsserting($expected, 'json');
+        $this->assertEquals($expected, genDiff($file1, $file2, 'json'));
     }
 }

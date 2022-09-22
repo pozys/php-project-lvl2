@@ -5,16 +5,6 @@ namespace Php\Project\Lvl2\Formatters\Plain;
 use Exception;
 
 use function Functional\flatten;
-use function Differ\Differ\{
-    getChildren,
-    getValue,
-    hasChildren,
-    isAdded,
-    isComplex,
-    isDeleted,
-    isUnchanged,
-    isUpdated
-};
 
 function getFormatted(array $data): string
 {
@@ -88,4 +78,49 @@ function toString(mixed $value)
     }
 
     return str_replace('"', '', $encodedValue);
+}
+
+function getValue(array $elem)
+{
+    return $elem['value'];
+}
+
+function getType(array $elem): string
+{
+    return $elem['type'];
+}
+
+function isAdded(array $description): bool
+{
+    return getType($description) === 'added';
+}
+
+function isDeleted(array $description): bool
+{
+    return getType($description) === 'deleted';
+}
+
+function isUpdated(array $description): bool
+{
+    return getType($description) === 'updated';
+}
+
+function isUnchanged(array $description): bool
+{
+    return getType($description) === 'unchanged';
+}
+
+function hasChildren(array $description): bool
+{
+    return getType($description) === 'hasChildren';
+}
+
+function getChildren(array $description): array
+{
+    return $description['children'];
+}
+
+function isComplex(mixed $value): bool
+{
+    return is_object($value);
 }
